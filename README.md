@@ -1,3 +1,5 @@
-The large dataset file is not included in this GitHub repository because GitHub does not allow files larger than 23 GB. Therefore, the file has been removed from the project.
-If you need the dataset, please use the official download link below and verify it before downloading:
-https://rdm.uq.edu.au/files/a4ad7080-ef9c-11ed-a964-b70596e96ad5
+This project is a real-time cybersecurity monitoring and intrusion detection application developed for small-scale organizations that lack dedicated security teams and advanced security infrastructure. Many small businesses are vulnerable to cyberattacks because they cannot afford expensive enterprise security solutions. As a result, attackers can exploit system weaknesses, causing financial losses, data breaches, and operational disruptions.
+
+To solve this problem, the project provides a lightweight and cost-effective security monitoring solution capable of detecting suspicious activities and monitoring network traffic in real time. The application continuously analyzes logs, requests, and network behavior to identify potential threats such as unauthorized access attempts, malicious traffic, abnormal user activity, and possible cyberattacks.
+
+Whenever suspicious activity is detected, the system generates instant alerts and displays them on a centralized dashboard. The dashboard helps administrators monitor security events efficiently by providing clear visibility into alerts, attack details, timestamps, and system status. This allows organizations to respond quickly and reduce the impact of security incidents
