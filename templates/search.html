@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔍 API Search - URL Security Scanner</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        background: white;
+        border-radius: 15px;
+        padding: 20px 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .header h1 {
+        font-size: 2em;
+        color: #333;
+        margin: 0;
+      }
+
+      .header p {
+        color: #666;
+        margin: 5px 0 0 0;
+      }
+
+      .search-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+      }
+
+      .search-box {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .search-box input {
+        flex: 1;
+        padding: 15px 20px;
+        font-size: 16px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        transition: border-color 0.3s;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn {
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        flex: 1;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #f0f0f0;
+        color: #666;
+      }
+
+      .btn-secondary:hover {
+        background: #e0e0e0;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .quick-examples {
+        margin-top: 15px;
+      }
+
+      .quick-examples h3 {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 10px;
+      }
+
+      .example-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .example-btn {
+        padding: 8px 15px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.85em;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .example-btn:hover {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 30px;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .loading.active {
+        display: block;
+      }
+
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        color: #666;
+        font-size: 1.1em;
+        margin-bottom: 10px;
+      }
+
+      .loading-subtext {
+        color: #999;
+        font-size: 0.9em;
+      }
+
+      /* Progressive Loading Animation */
+      .loading-layers {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .loading-layer {
+        width: 40px;
+        height: 40px;
+        background: #e0e0e0;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2em;
+        animation: pulse 1.5s ease-in-out infinite;
+      }
+
+      .loading-layer:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .loading-layer:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .loading-layer:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      .loading-layer:nth-child(4) {
+        animation-delay: 0.6s;
+      }
+      .loading-layer:nth-child(5) {
+        animation-delay: 0.8s;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          background: #e0e0e0;
+        }
+        50% {
+          transform: scale(1.1);
+          background: #667eea;
+          color: white;
+        }
+      }
+
+      .result {
+        display: none;
+        margin-top: 20px;
+      }
+
+      .result.active {
+        display: block;
+        animation: slideIn 0.3s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Layer Analysis Sections with Enhanced Visualization */
+      .layer-section {
+        background: #2d3748;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+      }
+
+      .layer-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .layer-section:hover {
+        transform: translateX(5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .layer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        color: white;
+      }
+
+      .layer-title-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .layer-icon {
+        font-size: 2em;
+        animation: iconFloat 3s ease-in-out infinite;
+      }
+
+      @keyframes iconFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      .layer-title {
+        font-size: 1.5em;
+        font-weight: 600;
+      }
+
+      .layer-badge {
+        padding: 6px 15px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        font-size: 0.8em;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .metric-card {
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .metric-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+
+      .metric-card:hover {
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Enhanced Color schemes for different metrics */
+      .metric-blue {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .metric-teal {
+        background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+      }
+      .metric-purple {
+        background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%);
+      }
+      .metric-pink {
+        background: linear-gradient(135deg, #be185d 0%, #ec4899 100%);
+      }
+      .metric-red {
+        background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
+      }
+      .metric-orange {
+        background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
+      }
+      .metric-green {
+        background: linear-gradient(135deg, #16a34a 0%, #4ade80 100%);
+      }
+      .metric-indigo {
+        background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+      }
+
+      .metric-icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+        animation: iconPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes iconPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .metric-label {
+        font-size: 0.85em;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 8px;
+        font-weight: 500;
+        text-transform: capitalize;
+      }
+
+      .metric-value {
+        font-size: 2em;
+        font-weight: bold;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Final Risk Score with Enhanced Visualization */
+      .risk-indicator {
+        text-align: center;
+        padding: 40px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .risk-indicator::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+
+      .risk-safe {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+      }
+
+      .risk-suspicious {
+        background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        color: white;
+      }
+
+      .risk-dangerous {
+        background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        color: white;
+      }
+
+      .risk-score {
+        font-size: 5em;
+        font-weight: bold;
+        margin: 15px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        animation: scoreAppear 0.5s ease-out;
+      }
+
+      @keyframes scoreAppear {
+        from {
+          transform: scale(0);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .risk-label {
+        font-size: 1.8em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+      }
+
+      .risk-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        font-size: 1em;
+        margin-top: 10px;
+      }
+
+      /* Analysis Progress Tracker */
+      .analysis-progress {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+      }
+
+      .progress-step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        padding: 10px;
+      }
+
+      .progress-step::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -50%;
+        width: 100%;
+        height: 2px;
+        background: #e0e0e0;
+        z-index: 0;
+      }
+
+      .progress-step:last-child::after {
+        display: none;
+      }
+
+      .progress-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 8px;
+        font-size: 1.2em;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s;
+      }
+
+      .progress-step.completed .progress-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .progress-label {
+        font-size: 0.75em;
+        color: #666;
+        font-weight: 500;
+      }
+
+      .details-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .details-section h3 {
+        color: #333;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 3px solid #667eea;
+        font-size: 1.3em;
+      }
+
+      .reason-item {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        border-left: 5px solid #667eea;
+        display: flex;
+        align-items: start;
+        gap: 15px;
+        transition: all 0.2s;
+      }
+
+      .reason-item:hover {
+        background: #f0f1f3;
+        transform: translateX(5px);
+      }
+
+      .reason-icon {
+        font-size: 1.5em;
+        min-width: 30px;
+      }
+
+      .reason-text {
+        flex: 1;
+        line-height: 1.6;
+      }
+
+      .error {
+        background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+        color: #c33;
+        padding: 20px 25px;
+        border-radius: 10px;
+        border-left: 5px solid #c33;
+        margin-top: 15px;
+        display: none;
+        animation: shake 0.5s;
+      }
+
+      .error.active {
+        display: block;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        75% {
+          transform: translateX(10px);
+        }
+      }
+
+      .error-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 1.1em;
+      }
+
+      .nav-buttons {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .nav-buttons a {
+        display: inline-block;
+        padding: 12px 25px;
+        margin: 0 8px;
+        background: white;
+        color: #667eea;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-buttons a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .history-section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        display: none;
+      }
+
+      .history-section.active {
+        display: block;
+      }
+
+      .history-section h2 {
+        color: #333;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #667eea;
+      }
+
+      .history-item {
+        background: #f8f9fa;
+        padding: 18px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .history-item:hover {
+        background: #e9ecef;
+        transform: translateX(5px);
+      }
+
+      .history-url {
+        flex: 1;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .history-badge {
+        padding: 6px 18px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .badge-safe {
+        background: #38ef7d;
+        color: white;
+      }
+
+      .badge-suspicious {
+        background: #ffd200;
+        color: #333;
+      }
+
+      .badge-dangerous {
+        background: #f45c43;
+        color: white;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: #999;
+      }
+
+      .empty-state-icon {
+        font-size: 4em;
+        margin-bottom: 15px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .metrics-grid {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+
+        .layer-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .search-box {
+          flex-direction: column;
+        }
+
+        .btn-group {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav-buttons">
+        <a href="/dashboard">📊 Dashboard</a>
+        <a href="/status-page">📈 Status</a>
+        <a href="/logout">🚪 Logout</a>
+      </div>
+
+      <div class="header">
+        <span style="font-size: 2.5em">🔍</span>
+        <div>
+          <h1>API Search - URL Security Scanner</h1>
+          <p>Multi-Layer Security Analysis with Real-Time Threat Detection</p>
+        </div>
+      </div>
+
+      <div class="search-card">
+        <div class="search-box">
+          <input
+            type="text"
+            id="urlInput"
+            placeholder="Enter URL to scan (e.g., https://example.com or http://testphp.vulnweb.com/search.php?test=2)"
+            onkeypress="if(event.key === 'Enter') scanUrl()"
+          />
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="scanUrl()" id="scanBtn">
+              🔍 Analyze URL
+            </button>
+            <button
+              class="btn btn-secondary"
+              onclick="clearResults()"
+              id="clearBtn"
+            >
+              Clear Results
+            </button>
+          </div>
+        </div>
+
+        <div class="quick-examples">
+          <h3>Quick Search Examples:</h3>
+          <div class="example-buttons">
+            <button
+              class="example-btn"
+              onclick="setExample('https://www.google.com')"
+            >
+              Safe URL Example
+            </button>
+            <button
+              class="example-btn"
+              onclick="setExample('http://testphp.vulnweb.com/artists.php?artist=1')"
+            >
+              Test SQL Injection
+            </button>
+            <button
+              class="example-btn"
+              onclick="setExample('http://testphp.vulnweb.com/search.php?test=query')"
+            >
+              Test XSS
+            </button>
+            <button
+              class="example-btn"
+              onclick="setExample('https://github.com')"
+            >
+              GitHub
+            </button>
+          </div>
+        </div>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <div class="loading-text">🔍 Analyzing URL Security...</div>
+          <div class="loading-subtext">Running 5-layer security analysis</div>
+          <div class="loading-layers">
+            <div class="loading-layer">🌐</div>
+            <div class="loading-layer">🛡️</div>
+            <div class="loading-layer">🔍</div>
+            <div class="loading-layer">👁️</div>
+            <div class="loading-layer">🔒</div>
+          </div>
+        </div>
+
+        <div class="error" id="error">
+          <div class="error-title">⚠️ Error</div>
+          <div id="errorMessage"></div>
+        </div>
+
+        <div class="result" id="result">
+          <!-- Analysis Progress Tracker -->
+          <div class="analysis-progress" id="analysisProgress">
+            <div class="progress-step completed">
+              <div class="progress-icon">🌐</div>
+              <div class="progress-label">Layer 1</div>
+            </div>
+            <div class="progress-step completed">
+              <div class="progress-icon">🛡️</div>
+              <div class="progress-label">Layer 2</div>
+            </div>
+            <div class="progress-step completed">
+              <div class="progress-icon">🔍</div>
+              <div class="progress-label">Layer 3</div>
+            </div>
+            <div class="progress-step completed">
+              <div class="progress-icon">👁️</div>
+              <div class="progress-label">Layer 4</div>
+            </div>
+            <div class="progress-step completed">
+              <div class="progress-icon">🔒</div>
+              <div class="progress-label">Layer 5</div>
+            </div>
+          </div>
+
+          <!-- Final Risk Assessment -->
+          <div class="risk-indicator" id="riskIndicator">
+            <div class="risk-score" id="riskScore">0</div>
+            <div class="risk-label" id="riskLabel">Unknown</div>
+            <div class="risk-badge">
+              Risk Score: <span id="riskScoreText">0</span>/100 | Confidence:
+              <span id="confidence">0%</span>
+            </div>
+          </div>
+
+          <!-- Layer 1: URL & Domain Analysis -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <div class="layer-title-group">
+                <span class="layer-icon">🌐</span>
+                <span class="layer-title">Layer 1: URL & Domain Analysis</span>
+              </div>
+              <span class="layer-badge">Domain Intelligence</span>
+            </div>
+            <div class="metrics-grid" id="layer1Metrics"></div>
+          </div>
+
+          <!-- Layer 2: Reputation Check -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <div class="layer-title-group">
+                <span class="layer-icon">🛡️</span>
+                <span class="layer-title">Layer 2: Reputation Check</span>
+              </div>
+              <span class="layer-badge">Threat Intelligence</span>
+            </div>
+            <div class="metrics-grid" id="layer2Metrics"></div>
+          </div>
+
+          <!-- Layer 3: Content Analysis -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <div class="layer-title-group">
+                <span class="layer-icon">🔍</span>
+                <span class="layer-title">Layer 3: Content Analysis</span>
+              </div>
+              <span class="layer-badge">Code Inspection</span>
+            </div>
+            <div class="metrics-grid" id="layer3Metrics"></div>
+          </div>
+
+          <!-- Layer 4: Behavior Observation -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <div class="layer-title-group">
+                <span class="layer-icon">👁️</span>
+                <span class="layer-title">Layer 4: Behavior Observation</span>
+              </div>
+              <span class="layer-badge">Runtime Analysis</span>
+            </div>
+            <div class="metrics-grid" id="layer4Metrics"></div>
+          </div>
+
+          <!-- Layer 5: Security Configuration -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <div class="layer-title-group">
+                <span class="layer-icon">🔒</span>
+                <span class="layer-title">Layer 5: Security Configuration</span>
+              </div>
+              <span class="layer-badge">Protocol Security</span>
+            </div>
+            <div class="metrics-grid" id="layer5Metrics"></div>
+          </div>
+
+          <!-- Final Analysis Summary -->
+          <div class="details-section">
+            <h3>📋 Detailed Analysis Summary</h3>
+            <div id="reasons"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-section" id="historySection">
+        <h2>📜 Recent Scans</h2>
+        <div id="historyList"></div>
+      </div>
+    </div>
+
+    <script>
+      // Check scanner and authentication on page load
+      window.addEventListener("load", function () {
+        checkHealth();
+        loadScanHistory();
+      });
+
+      async function checkHealth() {
+        try {
+          const response = await fetch("/api/health");
+          const data = await response.json();
+
+          if (data.scanner !== "ready") {
+            showError(
+              "⚠️ Security scanner is currently unavailable. Please contact your administrator."
+            );
+            document.getElementById("scanBtn").disabled = true;
+          }
+        } catch (error) {
+          console.error("Health check failed:", error);
+        }
+      }
+
+      function setExample(url) {
+        document.getElementById("urlInput").value = url;
+        document.getElementById("urlInput").focus();
+      }
+
+      async function scanUrl() {
+        const urlInput = document.getElementById("urlInput");
+        const url = urlInput.value.trim();
+
+        // Validation
+        if (!url) {
+          showError("Please enter a URL to scan");
+          return;
+        }
+
+        // Hide previous results and errors
+        hideError();
+        document.getElementById("result").classList.remove("active");
+
+        // Show loading
+        document.getElementById("loading").classList.add("active");
+        document.getElementById("scanBtn").disabled = true;
+        document.getElementById("clearBtn").disabled = true;
+
+        try {
+          console.log("Sending scan request for:", url);
+
+          const response = await fetch("/api/scan", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: url }),
+          });
+
+          console.log("Response status:", response.status);
+          console.log("Response headers:", response.headers);
+
+          // Check if response is JSON
+          const contentType = response.headers.get("content-type");
+          if (!contentType || !contentType.includes("application/json")) {
+            throw new Error(
+              "Server returned non-JSON response. You may need to login first."
+            );
+          }
+
+          const result = await response.json();
+          console.log("Scan result:", result);
+
+          // Hide loading
+          document.getElementById("loading").classList.remove("active");
+          document.getElementById("scanBtn").disabled = false;
+          document.getElementById("clearBtn").disabled = false;
+
+          if (result.success) {
+            displayResult(result.data);
+            loadScanHistory(); // Refresh history
+          } else {
+            showError(result.error || "Scan failed. Please try again.");
+          }
+        } catch (error) {
+          console.error("Scan error:", error);
+          document.getElementById("loading").classList.remove("active");
+          document.getElementById("scanBtn").disabled = false;
+          document.getElementById("clearBtn").disabled = false;
+
+          if (error.message.includes("login")) {
+            showError(
+              "⚠️ Authentication required. Please login first.\n\n" +
+                error.message
+            );
+          } else {
+            showError(
+              "❌ Network error or server unavailable.\n\nDetails: " +
+                error.message +
+                "\n\nPlease check:\n• Are you logged in?\n• Is the server running?\n• Is your network connection working?"
+            );
+          }
+        }
+      }
+
+      function displayResult(data) {
+        console.log("Displaying result:", data);
+
+        // Show result section
+        document.getElementById("result").classList.add("active");
+
+        // Update risk indicator
+        const riskScore = Math.round(data.risk_score);
+        const classification = data.classification;
+
+        document.getElementById("riskScore").textContent = riskScore;
+        document.getElementById("riskScoreText").textContent = riskScore;
+        document.getElementById("riskLabel").textContent = classification;
+        document.getElementById("confidence").textContent =
+          ((data.confidence || 0) * 100).toFixed(0) + "%";
+
+        // Set risk indicator color
+        const indicator = document.getElementById("riskIndicator");
+        indicator.className = "risk-indicator";
+
+        if (classification === "Safe") {
+          indicator.classList.add("risk-safe");
+        } else if (classification === "Suspicious") {
+          indicator.classList.add("risk-suspicious");
+        } else {
+          indicator.classList.add("risk-dangerous");
+        }
+
+        // Populate Layer 1: URL & Domain Analysis
+        const layer1Data = [
+          {
+            icon: "📏",
+            label: "URL Length",
+            value: data.features.url_length,
+            color: "metric-blue",
+          },
+          {
+            icon: "🌐",
+            label: "Subdomains",
+            value: data.features.subdomain_count,
+            color: "metric-teal",
+          },
+          {
+            icon: "📍",
+            label: "Uses IP",
+            value: data.features.uses_ip ? "Yes" : "No",
+            color: "metric-purple",
+          },
+          {
+            icon: "🔍",
+            label: "Keywords",
+            value: data.features.keyword_score,
+            color: "metric-pink",
+          },
+          {
+            icon: "<>",
+            label: "Special Chars",
+            value: data.features.special_char_count,
+            color: "metric-red",
+          },
+          {
+            icon: "⚠️",
+            label: "Suspicious TLD",
+            value: data.features.suspicious_tld ? "Yes" : "No",
+            color: "metric-orange",
+          },
+          {
+            icon: "📊",
+            label: "Entropy",
+            value: data.features.entropy.toFixed(2),
+            color: "metric-indigo",
+          },
+          {
+            icon: "🕐",
+            label: "Domain Age",
+            value:
+              data.features.domain_age_days >= 0
+                ? data.features.domain_age_days + " days"
+                : "Unknown",
+            color: "metric-purple",
+          },
+        ];
+        renderMetrics("layer1Metrics", layer1Data);
+
+        // Populate Layer 2: Reputation Check
+        const layer2Data = [
+          {
+            icon: "🚫",
+            label: "Blacklist Flag",
+            value: data.features.blacklist_flag ? "Yes" : "No",
+            color: "metric-red",
+          },
+          {
+            icon: "⭐",
+            label: "Reputation Score",
+            value: data.features.reputation_score.toFixed(0),
+            color: "metric-green",
+          },
+          {
+            icon: "🏢",
+            label: "Hosting Risk",
+            value: ["Low", "Medium", "High"][data.features.hosting_risk_level],
+            color: "metric-orange",
+          },
+        ];
+        renderMetrics("layer2Metrics", layer2Data);
+
+        // Populate Layer 3: Content Analysis
+        const layer3Data = [
+          {
+            icon: "📝",
+            label: "Form Risk Score",
+            value: data.features.form_risk_score.toFixed(0),
+            color: "metric-pink",
+          },
+          {
+            icon: "💻",
+            label: "JS Obfuscation",
+            value: data.features.js_obfuscation_score.toFixed(0),
+            color: "metric-purple",
+          },
+          {
+            icon: "🔗",
+            label: "External Deps",
+            value:
+              (data.features.external_dependency_ratio * 100).toFixed(0) + "%",
+            color: "metric-indigo",
+          },
+        ];
+        renderMetrics("layer3Metrics", layer3Data);
+
+        // Populate Layer 4: Behavior Observation
+        const layer4Data = [
+          {
+            icon: "🔄",
+            label: "Redirects",
+            value: data.features.redirect_count,
+            color: "metric-orange",
+          },
+          {
+            icon: "⬇️",
+            label: "Download Attempt",
+            value: data.features.download_attempt ? "Yes" : "No",
+            color: "metric-red",
+          },
+          {
+            icon: "⚡",
+            label: "Suspicious Requests",
+            value: data.features.suspicious_requests,
+            color: "metric-pink",
+          },
+        ];
+        renderMetrics("layer4Metrics", layer4Data);
+
+        // Populate Layer 5: Security Configuration
+        const layer5Data = [
+          {
+            icon: "🔐",
+            label: "HTTPS Enabled",
+            value: data.features.https_enabled ? "Yes" : "No",
+            color: "metric-green",
+          },
+          {
+            icon: "🛡️",
+            label: "TLS Score",
+            value: data.features.tls_score.toFixed(0),
+            color: "metric-blue",
+          },
+          {
+            icon: "⚙️",
+            label: "Missing Headers",
+            value: data.features.missing_headers_count,
+            color: "metric-red",
+          },
+        ];
+        renderMetrics("layer5Metrics", layer5Data);
+
+        // Display reasons with icons
+        const reasonsDiv = document.getElementById("reasons");
+        reasonsDiv.innerHTML = "";
+
+        const icons = ["🔍", "⚠️", "🔒", "🌐", "📊", "🔑", "🛡️", "⚡"];
+
+        if (data.reasons && data.reasons.length > 0) {
+          data.reasons.forEach((reason, index) => {
+            const reasonItem = document.createElement("div");
+            reasonItem.className = "reason-item";
+            reasonItem.innerHTML = `
+                        <div class="reason-icon">${
+                          icons[index % icons.length]
+                        }</div>
+                        <div class="reason-text">${reason}</div>
+                    `;
+            reasonsDiv.appendChild(reasonItem);
+          });
+        } else {
+          const reasonItem = document.createElement("div");
+          reasonItem.className = "reason-item";
+          reasonItem.innerHTML = `
+                    <div class="reason-icon">✅</div>
+                    <div class="reason-text">No specific security issues detected. The URL appears to be safe based on our comprehensive 5-layer analysis.</div>
+                `;
+          reasonsDiv.appendChild(reasonItem);
+        }
+
+        // Scroll to result
+        document.getElementById("result").scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+
+      function renderMetrics(containerId, metricsData) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+
+        metricsData.forEach((metric, index) => {
+          const card = document.createElement("div");
+          card.className = `metric-card ${metric.color}`;
+          card.style.animationDelay = `${index * 0.1}s`;
+          card.innerHTML = `
+            <div class="metric-icon">${metric.icon}</div>
+            <div class="metric-label">${metric.label}</div>
+            <div class="metric-value">${metric.value}</div>
+          `;
+          container.appendChild(card);
+        });
+      }
+
+      async function loadScanHistory() {
+        try {
+          const response = await fetch("/api/scan-history?limit=5");
+
+          // Check if logged in
+          if (response.status === 401) {
+            console.log("Not logged in, history not available");
+            return;
+          }
+
+          const result = await response.json();
+
+          if (result.success && result.history && result.history.length > 0) {
+            const historySection = document.getElementById("historySection");
+            const historyList = document.getElementById("historyList");
+
+            historyList.innerHTML = "";
+
+            result.history.forEach((item) => {
+              const historyItem = document.createElement("div");
+              historyItem.className = "history-item";
+              historyItem.onclick = () => {
+                document.getElementById("urlInput").value = item.url;
+              };
+
+              const badgeClass =
+                item.classification === "Safe"
+                  ? "badge-safe"
+                  : item.classification === "Suspicious"
+                  ? "badge-suspicious"
+                  : "badge-dangerous";
+
+              historyItem.innerHTML = `
+                            <div class="history-url" title="${item.url}">
+                                ${item.url}
+                            </div>
+                            <span class="history-badge ${badgeClass}">
+                                ${item.classification} (${Math.round(
+                item.risk_score
+              )})
+                            </span>
+                        `;
+
+              historyList.appendChild(historyItem);
+            });
+
+            historySection.classList.add("active");
+          }
+        } catch (error) {
+          console.error("Failed to load scan history:", error);
+        }
+      }
+
+      function clearResults() {
+        document.getElementById("result").classList.remove("active");
+        document.getElementById("error").classList.remove("active");
+        document.getElementById("urlInput").value = "";
+        document.getElementById("urlInput").focus();
+      }
+
+      function showError(message) {
+        const errorDiv = document.getElementById("error");
+        const errorMessage = document.getElementById("errorMessage");
+        errorMessage.textContent = message;
+        errorDiv.classList.add("active");
+
+        // Scroll to error
+        errorDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function hideError() {
+        document.getElementById("error").classList.remove("active");
+      }
+    </script>
+  </body>
+</html>

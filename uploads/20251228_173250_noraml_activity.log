@@ -1,0 +1,11 @@
+2025-12-18 09:00:12 INFO User login successful | user=employee01 | ip=192.168.1.15
+2025-12-18 09:02:30 INFO Accessed internal dashboard | user=employee01
+2025-12-18 09:05:45 INFO File downloaded | file=monthly_report.pdf | size=2.3MB
+2025-12-18 09:10:20 INFO Email sent successfully | recipient=team@company.com
+2025-12-18 09:15:55 INFO User logout | user=employee01
+
+2025-12-18 10:00:10 INFO User login successful | user=employee02 | ip=192.168.1.18
+2025-12-18 10:04:05 INFO Password changed successfully | user=employee02
+2025-12-18 10:08:40 INFO File uploaded | file=project_notes.docx | size=1.2MB
+2025-12-18 10:12:25 INFO Session timeout reached | user=employee02
+2025-12-18 10:12:26 INFO User logged out automatically

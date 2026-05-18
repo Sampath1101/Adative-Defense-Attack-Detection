@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔍 Security Scanner - URL Analysis</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .header h1 {
+        font-size: 3.5em;
+        color: white;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      .header .shield {
+        font-size: 1.2em;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+
+      .header p {
+        color: #a0a0a0;
+        font-size: 1.2em;
+      }
+
+      /* Search Card */
+      .search-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .search-box {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .search-box input {
+        flex: 1;
+        padding: 18px 25px;
+        font-size: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        transition: all 0.3s;
+      }
+
+      .search-box input::placeholder {
+        color: #888;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: #9333ea;
+        background: rgba(147, 51, 234, 0.1);
+      }
+
+      .btn {
+        padding: 18px 35px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #9333ea 0%, #3b82f6 100%);
+        color: white;
+        box-shadow: 0 5px 20px rgba(147, 51, 234, 0.4);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(147, 51, 234, 0.6);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Quick Examples */
+      .quick-examples {
+        margin-top: 20px;
+      }
+
+      .quick-examples h3 {
+        font-size: 0.9em;
+        color: #a0a0a0;
+        margin-bottom: 12px;
+      }
+
+      .example-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .example-btn {
+        padding: 10px 18px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        font-size: 0.85em;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #ccc;
+      }
+
+      .example-btn:hover {
+        background: #9333ea;
+        color: white;
+        border-color: #9333ea;
+        transform: translateY(-2px);
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: none;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .loading.active {
+        display: block;
+        animation: fadeIn 0.3s;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top: 4px solid #9333ea;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 25px;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+        color: white;
+        font-size: 1.3em;
+        margin-bottom: 10px;
+        font-weight: 600;
+      }
+
+      .loading-subtext {
+        color: #888;
+        font-size: 1em;
+      }
+
+      /* Layer Progress */
+      .layer-progress {
+        margin-top: 30px;
+      }
+
+      .layer-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+      }
+
+      .layer-item.pending {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.05);
+        opacity: 0.5;
+      }
+
+      .layer-item.active {
+        background: rgba(147, 51, 234, 0.2);
+        border-color: rgba(147, 51, 234, 0.5);
+        transform: scale(1.02);
+        box-shadow: 0 5px 20px rgba(147, 51, 234, 0.3);
+      }
+
+      .layer-item.completed {
+        background: rgba(34, 197, 94, 0.1);
+        border-color: rgba(34, 197, 94, 0.3);
+      }
+
+      .layer-icon {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 1.5em;
+        transition: all 0.3s;
+      }
+
+      .layer-item.active .layer-icon {
+        transform: scale(1.1);
+      }
+
+      .layer-name {
+        flex: 1;
+        color: white;
+        font-size: 1.1em;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .layer-status {
+        font-size: 1.5em;
+      }
+
+      /* Error */
+      .error {
+        display: none;
+        background: rgba(239, 68, 68, 0.1);
+        border: 2px solid rgba(239, 68, 68, 0.5);
+        border-left: 5px solid #ef4444;
+        color: #fca5a5;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 20px;
+        animation: shake 0.5s;
+      }
+
+      .error.active {
+        display: block;
+      }
+
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+
+      .error-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 1.1em;
+        color: #fecaca;
+      }
+
+      /* Results Section */
+      .result {
+        display: none;
+      }
+
+      .result.active {
+        display: block;
+        animation: fadeIn 0.5s;
+      }
+
+      /* Risk Overview */
+      .risk-overview {
+        padding: 50px;
+        border-radius: 20px;
+        margin-bottom: 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .risk-overview::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+      }
+
+      .risk-overview.safe {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      }
+
+      .risk-overview.suspicious {
+        background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+      }
+
+      .risk-overview.dangerous {
+        background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      }
+
+      .risk-score {
+        font-size: 5em;
+        font-weight: bold;
+        color: white;
+        margin: 20px 0;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .risk-label {
+        font-size: 2.5em;
+        font-weight: 700;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .risk-badge {
+        display: inline-block;
+        padding: 12px 25px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 25px;
+        font-size: 1.1em;
+        color: white;
+        backdrop-filter: blur(10px);
+      }
+
+      .risk-progress {
+        margin-top: 30px;
+        height: 15px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .risk-progress-bar {
+        height: 100%;
+        transition: width 1s ease-out;
+        border-radius: 10px;
+      }
+
+      .risk-progress-bar.safe {
+        background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+      }
+
+      .risk-progress-bar.suspicious {
+        background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+      }
+
+      .risk-progress-bar.dangerous {
+        background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+      }
+
+      /* Layer Sections */
+      .layer-section {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .layer-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        color: white;
+      }
+
+      .layer-header .emoji {
+        font-size: 2.5em;
+      }
+
+      .layer-title {
+        font-size: 1.8em;
+        font-weight: 600;
+      }
+
+      /* Metrics Grid */
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
+
+      .metric-card {
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+      }
+
+      .metric-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+      }
+
+      .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+
+      .metric-icon {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+      }
+
+      .metric-label {
+        font-size: 0.9em;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+
+      .metric-value {
+        font-size: 2.2em;
+        font-weight: bold;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Color Schemes */
+      .metric-blue { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+      .metric-teal { background: linear-gradient(135deg, #115e59 0%, #14b8a6 100%); }
+      .metric-purple { background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%); }
+      .metric-pink { background: linear-gradient(135deg, #9f1239 0%, #ec4899 100%); }
+      .metric-red { background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%); }
+      .metric-orange { background: linear-gradient(135deg, #c2410c 0%, #f97316 100%); }
+      .metric-green { background: linear-gradient(135deg, #166534 0%, #22c55e 100%); }
+      .metric-indigo { background: linear-gradient(135deg, #3730a3 0%, #6366f1 100%); }
+      .metric-amber { background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%); }
+      .metric-cyan { background: linear-gradient(135deg, #155e75 0%, #06b6d4 100%); }
+
+      /* Reasons Section */
+      .reasons-section {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .reasons-section h3 {
+        color: white;
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #9333ea;
+      }
+
+      .reason-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 18px 20px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        border-left: 5px solid #9333ea;
+        display: flex;
+        align-items: start;
+        gap: 15px;
+        transition: all 0.2s;
+        color: #e5e5e5;
+      }
+
+      .reason-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+      }
+
+      .reason-icon {
+        font-size: 1.5em;
+        min-width: 30px;
+      }
+
+      /* History Section */
+      .history-section {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: none;
+      }
+
+      .history-section.active {
+        display: block;
+      }
+
+      .history-section h2 {
+        color: white;
+        font-size: 2em;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .history-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .history-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+      }
+
+      .history-url {
+        flex: 1;
+        color: #ccc;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .history-badge {
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .badge-safe { background: #22c55e; color: white; }
+      .badge-suspicious { background: #f59e0b; color: white; }
+      .badge-dangerous { background: #ef4444; color: white; }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .header h1 { font-size: 2em; }
+        .search-box { flex-direction: column; }
+        .metrics-grid { grid-template-columns: 1fr 1fr; }
+        .risk-score { font-size: 3em; }
+        .risk-label { font-size: 1.8em; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>
+          <span class="shield">🛡️</span>
+          Security Scanner
+        </h1>
+        <p>AI-Powered Multi-Layer Website Security Analysis</p>
+      </div>
+
+      <!-- Search Card -->
+      <div class="search-card">
+        <div class="search-box">
+          <input
+            type="text"
+            id="urlInput"
+            placeholder="Enter URL to scan (e.g., https://example.com)"
+            onkeypress="if(event.key === 'Enter') scanUrl()"
+          />
+          <button class="btn btn-primary" onclick="scanUrl()" id="scanBtn">
+            <span>🔍</span>
+            Scan URL
+          </button>
+        </div>
+
+        <!-- Quick Examples -->
+        <div class="quick-examples">
+          <h3>Quick Examples:</h3>
+          <div class="example-buttons">
+            <button class="example-btn" onclick="setExample('https://www.google.com')">
+              Safe URL Example
+            </button>
+            <button class="example-btn" onclick="setExample('http://testphp.vulnweb.com/artists.php?artist=1')">
+              Test SQL Injection
+            </button>
+            <button class="example-btn" onclick="setExample('http://testphp.vulnweb.com/search.php?test=query')">
+              Test XSS
+            </button>
+            <button class="example-btn" onclick="setExample('https://github.com')">
+              GitHub
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading Animation -->
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <div class="loading-text">🔍 Analyzing URL Security...</div>
+          <div class="loading-subtext">Running multi-layer security analysis</div>
+
+          <!-- Layer Progress -->
+          <div class="layer-progress" id="layerProgress">
+            <div class="layer-item pending" id="layer0">
+              <div class="layer-icon" style="background: rgba(59, 130, 246, 0.2);">🌐</div>
+              <div class="layer-name">
+                <span>Layer 1: URL & Domain Analysis</span>
+              </div>
+              <div class="layer-status" id="status0"></div>
+            </div>
+            <div class="layer-item pending" id="layer1">
+              <div class="layer-icon" style="background: rgba(168, 85, 247, 0.2);">🛡️</div>
+              <div class="layer-name">
+                <span>Layer 2: Reputation Check</span>
+              </div>
+              <div class="layer-status" id="status1"></div>
+            </div>
+            <div class="layer-item pending" id="layer2">
+              <div class="layer-icon" style="background: rgba(34, 197, 94, 0.2);">🔍</div>
+              <div class="layer-name">
+                <span>Layer 3: Content Analysis</span>
+              </div>
+              <div class="layer-status" id="status2"></div>
+            </div>
+            <div class="layer-item pending" id="layer3">
+              <div class="layer-icon" style="background: rgba(249, 115, 22, 0.2);">👁️</div>
+              <div class="layer-name">
+                <span>Layer 4: Behavior Observation</span>
+              </div>
+              <div class="layer-status" id="status3"></div>
+            </div>
+            <div class="layer-item pending" id="layer4">
+              <div class="layer-icon" style="background: rgba(239, 68, 68, 0.2);">🔒</div>
+              <div class="layer-name">
+                <span>Layer 5: Security Configuration</span>
+              </div>
+              <div class="layer-status" id="status4"></div>
+            </div>
+            <div class="layer-item pending" id="layer5">
+              <div class="layer-icon" style="background: rgba(245, 158, 11, 0.2);">⚡</div>
+              <div class="layer-name">
+                <span>Layer 6: AI Risk Scoring</span>
+              </div>
+              <div class="layer-status" id="status5"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error" id="error">
+          <div class="error-title">⚠️ Error</div>
+          <div id="errorMessage"></div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="result" id="result">
+          <!-- Risk Overview -->
+          <div class="risk-overview" id="riskOverview">
+            <div class="risk-score" id="riskScore">0</div>
+            <div class="risk-label" id="riskLabel">Unknown</div>
+            <div class="risk-badge">
+              Risk Score: <span id="riskScoreText">0</span>/100 | 
+              Confidence: <span id="confidence">0%</span>
+            </div>
+            <div class="risk-progress">
+              <div class="risk-progress-bar" id="riskProgressBar" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Layer 1: URL & Domain Analysis -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <span class="emoji">🌐</span>
+              <span class="layer-title">Layer 1: URL & Domain Analysis</span>
+            </div>
+            <div class="metrics-grid" id="layer1Metrics"></div>
+          </div>
+
+          <!-- Layer 2: Reputation Check -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <span class="emoji">🛡️</span>
+              <span class="layer-title">Layer 2: Reputation Check</span>
+            </div>
+            <div class="metrics-grid" id="layer2Metrics"></div>
+          </div>
+
+          <!-- Layer 3: Content Analysis -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <span class="emoji">🔍</span>
+              <span class="layer-title">Layer 3: Content Analysis</span>
+            </div>
+            <div class="metrics-grid" id="layer3Metrics"></div>
+          </div>
+
+          <!-- Layer 4: Behavior Observation -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <span class="emoji">👁️</span>
+              <span class="layer-title">Layer 4: Behavior Observation</span>
+            </div>
+            <div class="metrics-grid" id="layer4Metrics"></div>
+          </div>
+
+          <!-- Layer 5: Security Configuration -->
+          <div class="layer-section">
+            <div class="layer-header">
+              <span class="emoji">🔒</span>
+              <span class="layer-title">Layer 5: Security Configuration</span>
+            </div>
+            <div class="metrics-grid" id="layer5Metrics"></div>
+          </div>
+
+          <!-- Analysis Summary -->
+          <div class="reasons-section">
+            <h3>📋 Detailed Analysis Summary</h3>
+            <div id="reasons"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan History -->
+      <div class="history-section" id="historySection">
+        <h2><span>📜</span> Recent Scans</h2>
+        <div id="historyList"></div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE_URL = "http://localhost:5000";
+      let currentLayer = 0;
+      let layerInterval = null;
+
+      // Load history on page load
+      window.addEventListener("load", function () {
+        loadScanHistory();
+      });
+
+      function setExample(url) {
+        document.getElementById("urlInput").value = url;
+        document.getElementById("urlInput").focus();
+      }
+
+      async function scanUrl() {
+        const urlInput = document.getElementById("urlInput");
+        const url = urlInput.value.trim();
+
+        if (!url) {
+          showError("Please enter a URL to scan");
+          return;
+        }
+
+        // Hide previous results and errors
+        hideError();
+        document.getElementById("result").classList.remove("active");
+
+        // Show loading
+        document.getElementById("loading").classList.add("active");
+        document.getElementById("scanBtn").disabled = true;
+
+        // Reset layer progress
+        currentLayer = 0;
+        for (let i = 0; i < 6; i++) {
+          const layer = document.getElementById(`layer${i}`);
+          layer.className = "layer-item pending";
+          document.getElementById(`status${i}`).textContent = "";
+        }
+
+        // Start layer animation
+        layerInterval = setInterval(() => {
+          if (currentLayer < 6) {
+            // Mark current layer as active
+            const activeLayer = document.getElementById(`layer${currentLayer}`);
+            activeLayer.className = "layer-item active";
+            document.getElementById(`status${currentLayer}`).innerHTML = 
+              '<span style="animation: spin 1s linear infinite; display: inline-block;">⏳</span>';
+
+            // Mark previous layer as completed
+            if (currentLayer > 0) {
+              const prevLayer = document.getElementById(`layer${currentLayer - 1}`);
+              prevLayer.className = "layer-item completed";
+              document.getElementById(`status${currentLayer - 1}`).textContent = "✅";
+            }
+
+            currentLayer++;
+          } else {
+            clearInterval(layerInterval);
+          }
+        }, 800);
+
+        try {
+          console.log("📡 Sending scan request to:", `${API_BASE_URL}/api/scan`);
+
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+          const response = await fetch(`${API_BASE_URL}/api/scan`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: url }),
+            signal: controller.signal,
+          });
+
+          clearTimeout(timeoutId);
+
+          const contentType = response.headers.get("content-type");
+          if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Backend returned HTML instead of JSON. Is Flask server running?");
+          }
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}` }));
+            throw new Error(errorData.error || `Server returned ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log("✅ Scan result:", data);
+
+          // Complete all layers
+          clearInterval(layerInterval);
+          for (let i = 0; i < 6; i++) {
+            const layer = document.getElementById(`layer${i}`);
+            layer.className = "layer-item completed";
+            document.getElementById(`status${i}`).textContent = "✅";
+          }
+
+          // Hide loading and show results
+          setTimeout(() => {
+            document.getElementById("loading").classList.remove("active");
+            document.getElementById("scanBtn").disabled = false;
+
+            if (data.success && data.data) {
+              displayResult(data.data);
+              loadScanHistory();
+            }
+          }, 1000);
+        } catch (error) {
+          console.error("❌ Scan error:", error);
+          clearInterval(layerInterval);
+          document.getElementById("loading").classList.remove("active");
+          document.getElementById("scanBtn").disabled = false;
+          showError(error.message || "An unexpected error occurred during the scan.");
+        }
+      }

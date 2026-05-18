@@ -1,0 +1,603 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - IDS System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .login-container {
+        background: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo h1 {
+        color: #667eea;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .logo p {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .alert {
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      .alert-error {
+        background: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+      }
+
+      .alert-success {
+        background: #efe;
+        color: #3c3;
+        border: 1px solid #cfc;
+      }
+
+      .divider {
+        text-align: center;
+        margin: 20px 0;
+        color: #999;
+      }
+
+      .link {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .link a:hover {
+        text-decoration: underline;
+      }
+
+      .password-toggle {
+        position: relative;
+      }
+
+      .password-toggle input {
+        padding-right: 40px;
+      }
+
+      .toggle-btn {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #666;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="logo">
+        <h1>🛡️ IDS System</h1>
+        <p>Intrusion Detection System</p>
+      </div>
+
+      {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+      {% endif %} {% if success %}
+      <div class="alert alert-success">{{ success }}</div>
+      {% endif %}
+
+      <form method="POST" action="/login">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autofocus />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-toggle">
+            <input type="password" id="password" name="password" required />
+            <button type="button" class="toggle-btn" onclick="togglePassword()">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Login</button>
+      </form>
+
+      <div class="divider">───── OR ─────</div>
+
+      <div class="link">
+        Don't have an account? <a href="/register">Register here</a>
+      </div>
+    </div>
+
+    <script>
+      function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+      }
+    </script>
+  </body>
+</html> -->
+
+<!-- ----------------------------option2---------------------------------------------------- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - IDS System</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .login-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        width: 100%;
+        max-width: 400px;
+        animation: slideIn 0.5s ease-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 30px;
+        text-align: center;
+        color: white;
+      }
+
+      .login-header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      .login-header p {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .login-form {
+        padding: 40px;
+      }
+
+      .alert {
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .alert-danger {
+        background-color: #fee;
+        border: 1px solid #fcc;
+        color: #c33;
+      }
+
+      .alert-success {
+        background-color: #efe;
+        border: 1px solid #cfc;
+        color: #3c3;
+      }
+
+      .alert-info {
+        background-color: #eef;
+        border: 1px solid #ccf;
+        color: #33c;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 14px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-loading::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 50%;
+        left: 50%;
+        margin-left: -10px;
+        margin-top: -10px;
+        border: 3px solid #fff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spinner 0.8s linear infinite;
+      }
+
+      @keyframes spinner {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .form-footer {
+        text-align: center;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .form-footer p {
+        color: #666;
+        font-size: 14px;
+      }
+
+      .form-footer a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .form-footer a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+      }
+
+      .back-home {
+        display: inline-block;
+        margin-top: 15px;
+        color: #667eea;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+      }
+
+      .back-home:hover {
+        color: #764ba2;
+      }
+
+      .password-toggle {
+        position: relative;
+      }
+
+      .password-toggle input {
+        padding-right: 45px;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 5px;
+      }
+
+      .toggle-password:hover {
+        color: #667eea;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-header">
+        <h1>🔐 Welcome Back</h1>
+        <p>Login to access your IDS Dashboard</p>
+      </div>
+
+      <div class="login-form">
+        <!-- Flash messages from Flask -->
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %} {% endif %} {% endwith %}
+
+        <!-- Dynamic alert for AJAX responses -->
+        <div id="alert-container"></div>
+
+        <form id="loginForm" method="POST" action="/login">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              autofocus
+              autocomplete="username"
+              placeholder="Enter your username"
+            />
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              autocomplete="current-password"
+              placeholder="Enter your password"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              onclick="togglePassword()"
+            >
+              👁️
+            </button>
+          </div>
+
+          <button type="submit" class="btn" id="loginBtn">
+            <span id="btnText">Login</span>
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Don't have an account? <a href="/register">Register here</a></p>
+          <a href="/" class="back-home">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const type =
+          passwordInput.getAttribute("type") === "password"
+            ? "text"
+            : "password";
+        passwordInput.setAttribute("type", type);
+      }
+
+      function showAlert(message, type = "danger") {
+        const alertContainer = document.getElementById("alert-container");
+        alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          alertContainer.innerHTML = "";
+        }, 5000);
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const btn = document.getElementById("loginBtn");
+          const btnText = document.getElementById("btnText");
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          // Clear previous alerts
+          document.getElementById("alert-container").innerHTML = "";
+
+          // Disable button and show loading
+          btn.disabled = true;
+          btnText.textContent = "Logging in...";
+          btn.classList.add("btn-loading");
+
+          // Send login request
+          fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                showAlert("Login successful! Redirecting...", "success");
+                setTimeout(() => {
+                  window.location.href = data.redirect;
+                }, 1000);
+              } else {
+                showAlert(
+                  data.error || "Login failed. Please try again.",
+                  "danger"
+                );
+                btn.disabled = false;
+                btnText.textContent = "Login";
+                btn.classList.remove("btn-loading");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              showAlert("An error occurred. Please try again.", "danger");
+              btn.disabled = false;
+              btnText.textContent = "Login";
+              btn.classList.remove("btn-loading");
+            });
+        });
+
+      // Allow Enter key to submit
+      document
+        .getElementById("password")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            document
+              .getElementById("loginForm")
+              .dispatchEvent(new Event("submit"));
+          }
+        });
+    </script>
+  </body>
+</html>

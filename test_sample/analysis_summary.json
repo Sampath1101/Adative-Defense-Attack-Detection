@@ -1,0 +1,23 @@
+{
+  "processing_started": "2025-12-28T14:01:06.606812",
+  "processing_completed": "2025-12-28T14:01:57.858192",
+  "duration_seconds": 51.25138,
+  "input_file": "data/test_dataset.csv",
+  "statistics": {
+    "total_rows": 50000,
+    "suspicious_rows": 15696,
+    "normal_rows": 34304,
+    "chunks_processed": 5,
+    "errors": 0
+  },
+  "detection_rate": {
+    "suspicious_percentage": 31.391999999999996,
+    "normal_percentage": 68.608
+  },
+  "output_files": {
+    "suspicious_csv": "data\\processed\\suspicious_activity.csv",
+    "normal_csv": "data\\processed\\normal_activity.csv",
+    "suspicious_json": "data\\processed\\suspicious_activity.json",
+    "summary": "data\\processed\\analysis_summary.json"
+  }
+}

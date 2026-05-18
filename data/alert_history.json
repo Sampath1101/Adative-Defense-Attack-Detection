@@ -1,0 +1,955 @@
+[
+  {
+    "id": "ALERT-20251228140939357123",
+    "timestamp": "2025-12-28T14:09:39.357219",
+    "ip": "127.0.0.1",
+    "path": "/",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Rate limit exceeded: 101 requests/min"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251228142443865723",
+    "timestamp": "2025-12-28T14:24:43.865792",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251228142548499748",
+    "timestamp": "2025-12-28T14:25:48.499834",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251228161139562599",
+    "timestamp": "2025-12-28T16:11:39.562654",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251228161234683179",
+    "timestamp": "2025-12-28T16:12:34.683275",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251228210808716440",
+    "timestamp": "2025-12-28T21:08:08.716488",
+    "ip": "127.0.0.1",
+    "path": "/upload/highly_malicious_traffic.csv",
+    "method": "UPLOAD",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 1.0,
+    "detection_method": "unified_analysis",
+    "reasons": [
+      "CSV parsing error: 'AnomalyDetector' object has no attribute 'is_ready'"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229133759801258",
+    "timestamp": "2025-12-29T13:37:59.801311",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229133954770534",
+    "timestamp": "2025-12-29T13:39:54.770589",
+    "ip": "127.0.0.1",
+    "path": "/admin/dashboard",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 404,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229145553405248",
+    "timestamp": "2025-12-29T14:55:53.405303",
+    "ip": "127.0.0.1",
+    "path": "/dashboard",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Rate limit exceeded: 101 requests/min"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229145553882016",
+    "timestamp": "2025-12-29T14:55:53.882087",
+    "ip": "127.0.0.1",
+    "path": "/dashboard",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Rate limit exceeded: 102 requests/min"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229145554446197",
+    "timestamp": "2025-12-29T14:55:54.446264",
+    "ip": "127.0.0.1",
+    "path": "/dashboard",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Rate limit exceeded: 103 requests/min"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229145554937837",
+    "timestamp": "2025-12-29T14:55:54.937917",
+    "ip": "127.0.0.1",
+    "path": "/dashboard",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Rate limit exceeded: 104 requests/min"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229145555442233",
+    "timestamp": "2025-12-29T14:55:55.442305",
+    "ip": "127.0.0.1",
+    "path": "/dashboard",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Rate limit exceeded: 105 requests/min"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229182016907816",
+    "timestamp": "2025-12-29T18:20:16.907832",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229191721403196",
+    "timestamp": "2025-12-29T19:17:21.403224",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229192422464534",
+    "timestamp": "2025-12-29T19:24:22.464627",
+    "ip": "127.0.0.1",
+    "path": "/' or 1 =1'--",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 404,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Potential SQL injection in path"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229192829409289",
+    "timestamp": "2025-12-29T19:28:29.409329",
+    "ip": "127.0.0.1",
+    "path": "/' or 1 =1'--",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 404,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Potential SQL injection in path"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229194349269534",
+    "timestamp": "2025-12-29T19:43:49.269564",
+    "ip": "127.0.0.1",
+    "path": "/admin/user",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 404,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229194352650967",
+    "timestamp": "2025-12-29T19:43:52.650982",
+    "ip": "127.0.0.1",
+    "path": "/admin/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 403,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "rule",
+    "reasons": [
+      "Suspicious path accessed: /admin"
+    ],
+    "severity": "low",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229224146604566",
+    "timestamp": "2025-12-29T22:41:46.604623",
+    "ip": "127.0.0.1",
+    "path": "/api/users",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 404,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "Command injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229225459942555",
+    "timestamp": "2025-12-29T22:54:59.942601",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "python-requests/2.32.5",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229225536431966",
+    "timestamp": "2025-12-29T22:55:36.432045",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229225737735043",
+    "timestamp": "2025-12-29T22:57:37.735106",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "python-requests/2.32.5",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229225932294891",
+    "timestamp": "2025-12-29T22:59:32.294975",
+    "ip": "127.0.0.1",
+    "path": "/etc/passwd",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.85,
+    "detection_method": "pattern",
+    "reasons": [
+      "Path traversal pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229231300411668",
+    "timestamp": "2025-12-29T23:13:00.411760",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229231301921781",
+    "timestamp": "2025-12-29T23:13:01.921845",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229231406514753",
+    "timestamp": "2025-12-29T23:14:06.514827",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229231407021688",
+    "timestamp": "2025-12-29T23:14:07.021774",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251229231533783615",
+    "timestamp": "2025-12-29T23:15:33.783694",
+    "ip": "127.0.0.1",
+    "path": "/ping",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "Command injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230100451246888",
+    "timestamp": "2025-12-30T10:04:51.246961",
+    "ip": "127.0.0.1",
+    "path": "/login",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230100620089479",
+    "timestamp": "2025-12-30T10:06:20.089573",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230100726956212",
+    "timestamp": "2025-12-30T10:07:26.956328",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101106406730",
+    "timestamp": "2025-12-30T10:11:06.406896",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101116709544",
+    "timestamp": "2025-12-30T10:11:16.709686",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101131057943",
+    "timestamp": "2025-12-30T10:11:31.058032",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101132791273",
+    "timestamp": "2025-12-30T10:11:32.791335",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101133823603",
+    "timestamp": "2025-12-30T10:11:33.823665",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101135034004",
+    "timestamp": "2025-12-30T10:11:35.034079",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101142777382",
+    "timestamp": "2025-12-30T10:11:42.777461",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101405216753",
+    "timestamp": "2025-12-30T10:14:05.216833",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230101613876096",
+    "timestamp": "2025-12-30T10:16:13.876191",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230102358239554",
+    "timestamp": "2025-12-30T10:23:58.239740",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230102545797731",
+    "timestamp": "2025-12-30T10:25:45.797811",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230112633690834",
+    "timestamp": "2025-12-30T11:26:33.690901",
+    "ip": "127.0.0.1",
+    "path": "/admin' or 1 =1'--",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "Sensitive path access attempt",
+      "Suspicious path accessed: /admin",
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230114956828780",
+    "timestamp": "2025-12-30T11:49:56.828815",
+    "ip": "127.0.0.1",
+    "path": "/login",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 503,
+    "is_suspicious": true,
+    "confidence": 0.95,
+    "detection_method": "pattern",
+    "reasons": [
+      "SQL injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230132441500022",
+    "timestamp": "2025-12-30T13:24:41.500058",
+    "ip": "127.0.0.1",
+    "path": "/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230132441567620",
+    "timestamp": "2025-12-30T13:24:41.567653",
+    "ip": "127.0.0.1",
+    "path": "/api/search",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230132520033740",
+    "timestamp": "2025-12-30T13:25:20.033762",
+    "ip": "127.0.0.1",
+    "path": "/profile",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "XSS pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230132645549803",
+    "timestamp": "2025-12-30T13:26:45.549848",
+    "ip": "127.0.0.1",
+    "path": "/admin",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.8,
+    "detection_method": "pattern",
+    "reasons": [
+      "Suspicious path accessed: /admin",
+      "Sensitive path access attempt"
+    ],
+    "severity": "medium",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  },
+  {
+    "id": "ALERT-20251230145008147523",
+    "timestamp": "2025-12-30T14:50:08.147720",
+    "ip": "127.0.0.1",
+    "path": "/login/register",
+    "method": "GET",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 Edg/143.0.0.0",
+    "status": 200,
+    "is_suspicious": true,
+    "confidence": 0.9,
+    "detection_method": "pattern",
+    "reasons": [
+      "Command injection pattern detected"
+    ],
+    "severity": "high",
+    "ml_scores": {},
+    "acknowledged": false,
+    "notes": ""
+  }
+]

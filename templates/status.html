@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Status - Advanced IDS</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* Header */
+      header {
+        background: white;
+        padding: 20px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 28px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .status-indicator.healthy {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .status-indicator.warning {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      /* Navigation */
+      .nav-buttons {
+        display: flex;
+        gap: 15px;
+      }
+
+      .btn {
+        padding: 10px 25px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .btn-home {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-home:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+      }
+
+      .btn-dashboard {
+        background: #2196f3;
+        color: white;
+      }
+
+      .btn-dashboard:hover {
+        background: #0b7dda;
+        transform: translateY(-2px);
+      }
+
+      .btn-refresh {
+        background: #4caf50;
+        color: white;
+      }
+
+      .btn-refresh:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+      }
+
+      /* Grid Layout */
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .status-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .status-card h2 {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .status-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .status-item:last-child {
+        border-bottom: none;
+      }
+
+      .status-label {
+        color: #666;
+        font-weight: 500;
+      }
+
+      .status-value {
+        color: #333;
+        font-weight: 600;
+      }
+
+      .status-value.success {
+        color: #4caf50;
+      }
+
+      .status-value.warning {
+        color: #ff9800;
+      }
+
+      .status-value.error {
+        color: #f44336;
+      }
+
+      /* Progress Bar */
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-top: 5px;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 4px;
+        transition: width 0.3s;
+      }
+
+      /* Badge */
+      .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .badge.green {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .badge.orange {
+        background: #fff3cd;
+        color: #856404;
+      }
+
+      .badge.red {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .badge.blue {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+
+      /* Models List */
+      .model-list {
+        list-style: none;
+      }
+
+      .model-item {
+        padding: 10px;
+        margin: 8px 0;
+        background: #f8f9fa;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .model-name {
+        font-weight: 600;
+        color: #333;
+      }
+
+      /* Alert Section */
+      .alert-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .alert-box {
+        text-align: center;
+        padding: 15px;
+        border-radius: 8px;
+        background: #f8f9fa;
+      }
+
+      .alert-number {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .alert-box.high .alert-number {
+        color: #f44336;
+      }
+
+      .alert-box.medium .alert-number {
+        color: #ff9800;
+      }
+
+      .alert-box.low .alert-number {
+        color: #ffc107;
+      }
+
+      .alert-label {
+        font-size: 12px;
+        color: #666;
+        text-transform: uppercase;
+      }
+
+      /* Loading */
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: white;
+        font-size: 18px;
+      }
+
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .status-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-buttons {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        header {
+          flex-direction: column;
+          gap: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header>
+        <div>
+          <h1>🔧 System Status</h1>
+          <div style="margin-top: 10px">
+            <span class="status-indicator healthy" id="systemStatus">
+              <span class="status-dot"></span>
+              <span>System Healthy</span>
+            </span>
+          </div>
+        </div>
+        <div class="nav-buttons">
+          <a href="/" class="btn btn-home">🏠 Home</a>
+          <a href="/dashboard" class="btn btn-dashboard">📊 Dashboard</a>
+          <button onclick="loadStatus()" class="btn btn-refresh">
+            🔄 Refresh
+          </button>
+        </div>
+      </header>
+
+      <!-- Loading State -->
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Loading system status...</p>
+      </div>
+
+      <!-- Status Grid -->
+      <div class="status-grid" id="statusGrid" style="display: none">
+        <!-- System Information -->
+        <div class="status-card">
+          <h2>⚙️ System Information</h2>
+          <div class="status-item">
+            <span class="status-label">Status</span>
+            <span class="status-value success" id="sysStatus">Running</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Uptime</span>
+            <span class="status-value" id="sysUptime">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Current Time</span>
+            <span class="status-value" id="sysTime">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Python Version</span>
+            <span class="status-value" id="pythonVersion">-</span>
+          </div>
+        </div>
+
+        <!-- Detection System -->
+        <div class="status-card">
+          <h2>🤖 Detection System</h2>
+          <div class="status-item">
+            <span class="status-label">ML Models Loaded</span>
+            <span class="status-value success" id="modelsLoaded">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Detection Method</span>
+            <span class="status-value" id="detectionMethod">Hybrid</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Anomaly Threshold</span>
+            <span class="status-value" id="threshold">0.6</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Rate Limit</span>
+            <span class="status-value" id="rateLimit">100/min</span>
+          </div>
+        </div>
+
+        <!-- ML Models -->
+        <div class="status-card">
+          <h2>🧠 Machine Learning Models</h2>
+          <ul class="model-list" id="modelList">
+            <li class="model-item">
+              <span class="model-name">Isolation Forest</span>
+              <span class="badge green" id="ifStatus">Loading...</span>
+            </li>
+            <li class="model-item">
+              <span class="model-name">Random Forest</span>
+              <span class="badge green" id="rfStatus">Loading...</span>
+            </li>
+          </ul>
+          <div class="status-item" style="margin-top: 15px">
+            <span class="status-label">Training Samples</span>
+            <span class="status-value" id="trainingSamples">-</span>
+          </div>
+        </div>
+
+        <!-- Alert Statistics -->
+        <div class="status-card">
+          <h2>🚨 Alert Statistics</h2>
+          <div class="status-item">
+            <span class="status-label">Total Alerts</span>
+            <span class="status-value" id="totalAlerts">0</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Last 24 Hours</span>
+            <span class="status-value" id="alerts24h">0</span>
+          </div>
+          <div class="alert-summary">
+            <div class="alert-box high">
+              <div class="alert-number" id="highAlerts">0</div>
+              <div class="alert-label">High</div>
+            </div>
+            <div class="alert-box medium">
+              <div class="alert-number" id="mediumAlerts">0</div>
+              <div class="alert-label">Medium</div>
+            </div>
+            <div class="alert-box low">
+              <div class="alert-number" id="lowAlerts">0</div>
+              <div class="alert-label">Low</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Traffic Statistics -->
+        <div class="status-card">
+          <h2>📊 Traffic Statistics</h2>
+          <div class="status-item">
+            <span class="status-label">Total Requests</span>
+            <span class="status-value" id="totalRequests">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Suspicious Requests</span>
+            <span class="status-value warning" id="suspiciousRequests">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Detection Rate</span>
+            <span class="status-value" id="detectionRate">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Avg Response Time</span>
+            <span class="status-value" id="avgResponseTime">-</span>
+          </div>
+        </div>
+
+        <!-- File Storage -->
+        <div class="status-card">
+          <h2>💾 Data Storage</h2>
+          <div class="status-item">
+            <span class="status-label">Traffic Logs</span>
+            <span class="status-value success" id="trafficLogs">Active</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Alert History</span>
+            <span class="status-value success" id="alertHistory">Active</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Training Data</span>
+            <span class="status-value success" id="trainingData">Active</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Uploaded Files</span>
+            <span class="status-value" id="uploadedFiles">-</span>
+          </div>
+        </div>
+
+        <!-- Configuration -->
+        <div class="status-card">
+          <h2>⚙️ Configuration</h2>
+          <div class="status-item">
+            <span class="status-label">Debug Mode</span>
+            <span class="status-value" id="debugMode">-</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Log Level</span>
+            <span class="status-value" id="logLevel">INFO</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Max Upload Size</span>
+            <span class="status-value" id="maxUpload">16 MB</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Email Alerts</span>
+            <span class="status-value" id="emailAlerts">-</span>
+          </div>
+        </div>
+
+        <!-- API Endpoints -->
+        <div class="status-card">
+          <h2>🌐 API Endpoints</h2>
+          <div class="status-item">
+            <span class="status-label">/api/stats</span>
+            <span class="badge blue">GET</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">/api/alerts</span>
+            <span class="badge blue">GET</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">/api/detect</span>
+            <span class="badge orange">POST</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">/api/upload-analyze</span>
+            <span class="badge orange">POST</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load status data
+      async function loadStatus() {
+        try {
+          // Show loading
+          document.getElementById("loading").style.display = "block";
+          document.getElementById("statusGrid").style.display = "none";
+
+          // Fetch system status
+          const statusResponse = await fetch("/api/status");
+          const statusData = await statusResponse.json();
+
+          // Fetch health check
+          const healthResponse = await fetch("/api/health");
+          const healthData = await healthResponse.json();
+
+          // Fetch stats
+          const statsResponse = await fetch("/api/stats");
+          const statsData = await statsResponse.json();
+
+          // Update UI
+          updateSystemInfo(statusData, healthData);
+          updateDetectionSystem(statusData);
+          updateModels(statusData);
+          updateAlerts(statsData);
+          updateTraffic(statusData);
+          updateStorage(statusData);
+          updateConfig(statusData);
+
+          // Hide loading, show content
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("statusGrid").style.display = "grid";
+        } catch (error) {
+          console.error("Error loading status:", error);
+          document.getElementById("loading").innerHTML = `
+                    <p style="color: #f44336;">❌ Failed to load system status</p>
+                    <p style="font-size: 14px; margin-top: 10px;">Error: ${error.message}</p>
+                    <button onclick="loadStatus()" class="btn btn-refresh" style="margin-top: 20px;">Try Again</button>
+                `;
+        }
+      }
+
+      function updateSystemInfo(data, health) {
+        document.getElementById("sysStatus").textContent =
+          data.system || "Running";
+        document.getElementById("sysTime").textContent = new Date(
+          data.timestamp
+        ).toLocaleString();
+        document.getElementById("pythonVersion").textContent =
+          navigator.userAgent.includes("Python") ? "Python 3.x" : "N/A";
+      }
+
+      function updateDetectionSystem(data) {
+        const ids = data.ids || {};
+        document.getElementById("modelsLoaded").textContent = ids.models_loaded
+          ? "✓ Yes"
+          : "✗ No";
+
+        if (ids.models_loaded) {
+          document.getElementById("modelsLoaded").className =
+            "status-value success";
+        } else {
+          document.getElementById("modelsLoaded").className =
+            "status-value error";
+        }
+      }
+
+      function updateModels(data) {
+        const ids = data.ids || {};
+
+        if (ids.models_loaded) {
+          document.getElementById("ifStatus").textContent = "Loaded";
+          document.getElementById("ifStatus").className = "badge green";
+          document.getElementById("rfStatus").textContent = "Loaded";
+          document.getElementById("rfStatus").className = "badge green";
+        } else {
+          document.getElementById("ifStatus").textContent = "Not Loaded";
+          document.getElementById("ifStatus").className = "badge red";
+          document.getElementById("rfStatus").textContent = "Not Loaded";
+          document.getElementById("rfStatus").className = "badge red";
+        }
+
+        document.getElementById("trainingSamples").textContent =
+          ids.total_samples || "N/A";
+      }
+
+      function updateAlerts(data) {
+        const alerts = data.alerts || {};
+        const total = alerts.total_alerts || 0;
+        const bySeverity = alerts.by_severity || {};
+
+        document.getElementById("totalAlerts").textContent = total;
+        document.getElementById("alerts24h").textContent =
+          alerts.last_24h || total;
+        document.getElementById("highAlerts").textContent =
+          bySeverity.high || 0;
+        document.getElementById("mediumAlerts").textContent =
+          bySeverity.medium || 0;
+        document.getElementById("lowAlerts").textContent = bySeverity.low || 0;
+      }
+
+      function updateTraffic(data) {
+        const ids = data.ids || {};
+        document.getElementById("totalRequests").textContent =
+          ids.total_detections || "N/A";
+        document.getElementById("suspiciousRequests").textContent =
+          ids.suspicious_count || "N/A";
+
+        const detectionRate = ids.detection_rate || "N/A";
+        document.getElementById("detectionRate").textContent =
+          typeof detectionRate === "number"
+            ? (detectionRate * 100).toFixed(1) + "%"
+            : detectionRate;
+
+        document.getElementById("avgResponseTime").textContent = "< 20ms";
+      }
+
+      function updateStorage(data) {
+        document.getElementById("uploadedFiles").textContent = "0";
+      }
+
+      function updateConfig(data) {
+        document.getElementById("debugMode").textContent = "Off";
+        document.getElementById("emailAlerts").textContent = "Configured";
+      }
+
+      // Load on page load
+      window.addEventListener("DOMContentLoaded", loadStatus);
+
+      // Auto-refresh every 30 seconds
+      setInterval(loadStatus, 30000);
+    </script>
+  </body>
+</html>

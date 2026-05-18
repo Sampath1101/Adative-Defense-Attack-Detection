@@ -1,0 +1,1402 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced IDS - Intrusion Detection System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      /* Navigation */
+      nav {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #667eea;
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #667eea;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 150px 2rem 100px;
+        text-align: center;
+        margin-top: 60px;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .btn-primary {
+        background: white;
+        color: #667eea;
+        padding: 1rem 3rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+        padding: 1rem 3rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s;
+        margin-left: 1rem;
+      }
+
+      .btn-secondary:hover {
+        background: white;
+        color: #667eea;
+      }
+
+      /* Features Section */
+      .features {
+        padding: 100px 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 4rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+      }
+
+      .feature-card {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .feature-card p {
+        color: #666;
+        line-height: 1.8;
+      }
+
+      /* Upload Section */
+      .upload-section {
+        background: #f8f9fa;
+        padding: 100px 2rem;
+      }
+
+      .upload-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .upload-area {
+        border: 3px dashed #667eea;
+        border-radius: 15px;
+        padding: 4rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #f8f9ff;
+      }
+
+      .upload-area:hover {
+        background: #f0f2ff;
+        border-color: #764ba2;
+      }
+
+      .upload-area.dragover {
+        background: #e8ebff;
+        border-color: #764ba2;
+      }
+
+      .upload-icon {
+        font-size: 4rem;
+        color: #667eea;
+        margin-bottom: 1rem;
+      }
+
+      .upload-text {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .upload-subtext {
+        font-size: 0.9rem;
+        color: #999;
+      }
+
+      #fileInput {
+        display: none;
+      }
+
+      .preview-container {
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .preview-image {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .analysis-result {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        display: none;
+      }
+
+      .result-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .result-badge.safe {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .result-badge.threat {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      /* Stats Section */
+      .stats {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 2rem;
+      }
+
+      .stats-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        text-align: center;
+      }
+
+      .stat-card h3 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-card p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      /* CTA Section */
+      .cta {
+        padding: 100px 2rem;
+        text-align: center;
+        background: #f8f9fa;
+      }
+
+      .cta h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+      }
+
+      .cta p {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 2rem;
+      }
+
+      /* Footer */
+      footer {
+        background: #2d3748;
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .btn-secondary {
+          display: block;
+          margin: 1rem 0;
+        }
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+        display: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <-- Navigation -->
+<!-- <nav>
+      <div class="nav-container">
+        <a href="/" class="logo">🛡️ ATTACK DETECTION 🕵️</a>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#upload">Upload</a></li>
+          <li><a href="/status-page">Status</a></li>
+          <li><a href="/search">Endpoint</a></li>
+          <li><a href="/register">Register</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <-- Hero Section -->
+<!-- <section class="hero">
+      <h1>ADAPTIVE DEFENCE ATTACK DETECTION</h1>
+      <p>Real-time threat detection powered by Machine Learning</p>
+      <a href="/dashboard" class="btn-primary">View Dashboard</a>
+      <a href="#upload" class="btn-secondary">Upload & Analyze</a>
+    </section> -->
+
+<!-- Stats Section -->
+<!-- <section class="stats">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 id="totalAlerts">0</h3>
+          <p>Total Alerts</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="threatsBlocked">0</h3>
+          <p>Threats Blocked</p>
+        </div>
+        <div class="stat-card">
+          <h3>99.9%</h3>
+          <p>Detection Rate</p>
+        </div>
+        <div class="stat-card">
+          <h3>24/7</h3>
+          <p>Active Monitoring</p>
+        </div>
+      </div>
+    </section> -->
+
+<!-- Features Section -->
+<!-- <section class="features" id="features">
+      <h2 class="section-title">Powerful Security Features</h2>
+      <p class="section-subtitle">
+        Comprehensive protection for your applications
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>ML-Powered Detection</h3>
+          <p>
+            Advanced machine learning algorithms detect known and unknown
+            threats in real-time
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Real-Time Analysis</h3>
+          <p>Every request is analyzed instantly with sub-20ms response time</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Interactive Dashboard</h3>
+          <p>
+            Beautiful visualizations and comprehensive analytics at your
+            fingertips
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Multi-Layer Protection</h3>
+          <p>Combines rule-based and ML detection for maximum security</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Smart Alerts</h3>
+          <p>Instant notifications via email, console, and dashboard</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>Continuous Learning</h3>
+          <p>System improves over time by learning from new threats</p>
+        </div>
+      </div>
+    </section> -->
+
+<!-- Upload Section -->
+<!-- <section class="upload-section" id="upload">
+      <div class="upload-container">
+        <h2 class="section-title">Analyze Suspicious Files</h2>
+        <p class="section-subtitle">
+          Upload images, logs, or files for threat analysis
+        </p>
+
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Drag & drop files here</div>
+          <div class="upload-subtext">
+            or click to browse (PNG, JPG, TXT, LOG, CSV)
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*,.txt,.log,.csv"
+            multiple
+          />
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+          <img class="preview-image" id="previewImage" alt="Preview" />
+          <button class="btn-primary" id="analyzeBtn">Analyze File</button>
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+
+        <div class="analysis-result" id="analysisResult">
+          <span class="result-badge safe" id="resultBadge">Analyzing...</span>
+          <h3 id="resultTitle">Analysis Complete</h3>
+          <p id="resultDescription"></p>
+        </div>
+      </div>
+    </section>
+
+    <-- CTA Section -->
+<!-- <section class="cta">
+      <h2>Ready to Secure Your Application?</h2>
+      <p>Start protecting your system with advanced threat detection today</p>
+      <a href="/dashboard" class="btn-primary">Get Started</a>
+    </section> -->
+
+<!-- Footer -->
+<!-- <footer>
+      <p>&copy; 2025 Advanced IDS. All rights reserved.</p>
+      <p>Powered by Machine Learning & Real-Time Detection</p>
+    </footer>
+
+    <script>
+      // Load statistics
+      async function loadStats() {
+        try {
+          const response = await fetch("/api/stats");
+          const data = await response.json();
+
+          document.getElementById("totalAlerts").textContent =
+            data.alerts.total_alerts;
+          document.getElementById("threatsBlocked").textContent =
+            data.alerts.by_severity.high || 0;
+        } catch (error) {
+          console.error("Error loading stats:", error);
+        }
+      }
+
+      // Upload functionality
+      const uploadArea = document.getElementById("uploadArea");
+      const fileInput = document.getElementById("fileInput");
+      const previewContainer = document.getElementById("previewContainer");
+      const previewImage = document.getElementById("previewImage");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const spinner = document.getElementById("spinner");
+      const analysisResult = document.getElementById("analysisResult");
+      const resultBadge = document.getElementById("resultBadge");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultDescription = document.getElementById("resultDescription");
+
+      let currentFile = null;
+
+      // Click to upload
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      // Drag and drop
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      });
+
+      // File input change
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      // Handle file
+      function handleFile(file) {
+        currentFile = file;
+
+        // Show preview for images
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewImage.src = "";
+          previewContainer.style.display = "block";
+          previewContainer.innerHTML = `
+                    <p>File: ${file.name}</p>
+                    <p>Size: ${(file.size / 1024).toFixed(2)} KB</p>
+                    <button class="btn-primary" id="analyzeBtn">Analyze File</button>
+                `;
+        }
+
+        analysisResult.style.display = "none";
+      }
+
+      // Analyze button
+      document.addEventListener("click", async (e) => {
+        if (e.target.id === "analyzeBtn") {
+          await analyzeFile();
+        }
+      });
+
+      // Analyze file
+      async function analyzeFile() {
+        if (!currentFile) return;
+
+        spinner.style.display = "block";
+        analysisResult.style.display = "none"; -->
+
+<!-- const formData = new FormData();
+        formData.append("file", currentFile);
+
+        try {
+          const response = await fetch("/api/upload-analyze", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          spinner.style.display = "none";
+          analysisResult.style.display = "block";
+
+          if (result.is_suspicious) {
+            resultBadge.className = "result-badge threat";
+            resultBadge.textContent = `⚠️ Threat Detected - ${result.severity.toUpperCase()}`;
+            resultTitle.textContent = "Suspicious Content Found";
+            resultDescription.innerHTML = `
+                        <strong>Confidence:</strong> ${(
+                          result.confidence * 100
+                        ).toFixed(0)}%<br>
+                        <strong>Detection Method:</strong> ${
+                          result.detection_method
+                        }<br>
+                        <strong>Threats:</strong><br>
+                        ${result.reasons.map((r) => `• ${r}`).join("<br>")}
+                    `;
+          } else {
+            resultBadge.className = "result-badge safe";
+            resultBadge.textContent = "✓ No Threats Detected";
+            resultTitle.textContent = "File is Clean";
+            resultDescription.textContent =
+              "No suspicious content or patterns were found in this file.";
+          }
+        } catch (error) {
+          spinner.style.display = "none";
+          analysisResult.style.display = "block";
+          resultBadge.className = "result-badge threat";
+          resultBadge.textContent = "Error";
+          resultTitle.textContent = "Analysis Failed";
+          resultDescription.textContent =
+            "Could not analyze file. Please try again.";
+        }
+      }
+
+      // Load stats on page load
+      loadStats();
+
+      // Refresh stats every 30 seconds
+      setInterval(loadStats, 30000);
+    </script>
+  </body>
+</html>  -->
+
+<!--  optiion2 ------------------------------------------------------------------- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced IDS - Intrusion Detection System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        line-height: 1.6;
+        color: #333;
+      }
+
+      /* Navigation */
+      nav {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #667eea;
+        text-decoration: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #667eea;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .user-badge {
+        background: #667eea;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .user-badge.admin {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .logout-btn {
+        background: #f44336;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+      }
+
+      .logout-btn:hover {
+        background: #d32f2f;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+      }
+
+      /* Hero Section */
+      .hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 150px 2rem 100px;
+        text-align: center;
+        margin-top: 60px;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+      }
+
+      .btn-primary {
+        background: white;
+        color: #667eea;
+        padding: 1rem 3rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+        padding: 1rem 3rem;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s;
+        margin-left: 1rem;
+      }
+
+      .btn-secondary:hover {
+        background: white;
+        color: #667eea;
+      }
+
+      /* Features Section */
+      .features {
+        padding: 100px 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .section-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .section-subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 4rem;
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+      }
+
+      .feature-card {
+        text-align: center;
+        padding: 2rem;
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      .feature-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+      }
+
+      .feature-card p {
+        color: #666;
+        line-height: 1.8;
+      }
+
+      /* Upload Section */
+      .upload-section {
+        background: #f8f9fa;
+        padding: 100px 2rem;
+      }
+
+      .upload-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 3rem;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .upload-area {
+        border: 3px dashed #667eea;
+        border-radius: 15px;
+        padding: 4rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #f8f9ff;
+      }
+
+      .upload-area:hover {
+        background: #f0f2ff;
+        border-color: #764ba2;
+      }
+
+      .upload-area.dragover {
+        background: #e8ebff;
+        border-color: #764ba2;
+      }
+
+      .upload-icon {
+        font-size: 4rem;
+        color: #667eea;
+        margin-bottom: 1rem;
+      }
+
+      .upload-text {
+        font-size: 1.2rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .upload-subtext {
+        font-size: 0.9rem;
+        color: #999;
+      }
+
+      #fileInput {
+        display: none;
+      }
+
+      .preview-container {
+        margin-top: 2rem;
+        display: none;
+      }
+
+      .preview-image {
+        max-width: 100%;
+        border-radius: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .analysis-result {
+        margin-top: 2rem;
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        display: none;
+      }
+
+      .result-badge {
+        display: inline-block;
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+      .result-badge.safe {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .result-badge.threat {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      /* Stats Section */
+      .stats {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 2rem;
+      }
+
+      .stats-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 3rem;
+        text-align: center;
+      }
+
+      .stat-card h3 {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-card p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      /* CTA Section */
+      .cta {
+        padding: 100px 2rem;
+        text-align: center;
+        background: #f8f9fa;
+      }
+
+      .cta h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+      }
+
+      .cta p {
+        font-size: 1.2rem;
+        color: #666;
+        margin-bottom: 2rem;
+      }
+
+      /* Footer */
+      footer {
+        background: #2d3748;
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .btn-secondary {
+          display: block;
+          margin: 1rem 0;
+        }
+      }
+
+      /* Loading Spinner */
+      .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+        display: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-container">
+        <a href="/" class="logo">🛡️ ATTACK DETECTION 🕵️</a>
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          {% if current_user.is_authenticated and current_user.is_admin() %}
+          <li><a href="/dashboard">Dashboard</a></li>
+          {% endif %}
+          <li><a href="#features">Features</a></li>
+          <li><a href="#upload">Upload</a></li>
+          <li><a href="/search">Search</a></li>
+          <li><a href="/status-page">Status</a></li>
+        </ul>
+        <div class="user-info">
+          {% if current_user.is_authenticated %}
+          <span
+            class="user-badge {% if current_user.is_admin() %}admin{% endif %}"
+          >
+            {% if current_user.is_admin() %}👑 Admin: {% else %}🤷‍♂️ {% endif %}{{
+            current_user.username }}
+          </span>
+          <a href="/logout" class="logout-btn">Logout</a>
+          {% else %}
+          <a
+            href="/login"
+            class="btn-primary"
+            style="padding: 0.5rem 1.5rem; font-size: 0.9rem"
+            >Login</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <h1>ADAPTIVE DEFENCE ATTACK DETECTION</h1>
+      <p>Real-time threat detection powered by Machine Learning</p>
+      {% if current_user.is_authenticated and current_user.is_admin() %}
+      <a href="/dashboard" class="btn-primary">View Dashboard</a>
+      {% else %}
+      <a href="/login" class="btn-primary">Login to Access</a>
+      {% endif %}
+      <a href="#upload" class="btn-secondary">Upload & Analyze</a>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3 id="totalAlerts">0</h3>
+          <p>Total Alerts</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="threatsBlocked">0</h3>
+          <p>Threats Blocked</p>
+        </div>
+        <div class="stat-card">
+          <h3>99.9%</h3>
+          <p>Detection Rate</p>
+        </div>
+        <div class="stat-card">
+          <h3>24/7</h3>
+          <p>Active Monitoring</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+      <h2 class="section-title">Powerful Security Features</h2>
+      <p class="section-subtitle">
+        Comprehensive protection for your applications
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>ML-Powered Detection</h3>
+          <p>
+            Advanced machine learning algorithms detect known and unknown
+            threats in real-time
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Real-Time Analysis</h3>
+          <p>Every request is analyzed instantly with sub-20ms response time</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Interactive Dashboard</h3>
+          <p>
+            Beautiful visualizations and comprehensive analytics at your
+            fingertips
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Multi-Layer Protection</h3>
+          <p>Combines rule-based and ML detection for maximum security</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🔔</div>
+          <h3>Smart Alerts</h3>
+          <p>Instant notifications via email, console, and dashboard</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>Continuous Learning</h3>
+          <p>System improves over time by learning from new threats</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="upload-section" id="upload">
+      <div class="upload-container">
+        <h2 class="section-title">Analyze Suspicious Files</h2>
+        <p class="section-subtitle">
+          Upload images, logs, or files for threat analysis
+        </p>
+
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Drag & drop files here</div>
+          <div class="upload-subtext">
+            or click to browse (PNG, JPG, TXT, LOG, CSV)
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*,.txt,.log,.csv"
+            multiple
+          />
+        </div>
+
+        <div class="preview-container" id="previewContainer">
+          <img class="preview-image" id="previewImage" alt="Preview" />
+          <button class="btn-primary" id="analyzeBtn">Analyze File</button>
+        </div>
+
+        <div class="spinner" id="spinner"></div>
+
+        <div class="analysis-result" id="analysisResult">
+          <span class="result-badge safe" id="resultBadge">Analyzing...</span>
+          <h3 id="resultTitle">Analysis Complete</h3>
+          <p id="resultDescription"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+      <h2>Ready to Secure Your Application?</h2>
+      <p>Start protecting your system with advanced threat detection today</p>
+      {% if current_user.is_authenticated and current_user.is_admin() %}
+      <a href="/dashboard" class="btn-primary">Get Started</a>
+      {% else %}
+      <a href="/login" class="btn-primary">Login to Get Started</a>
+      {% endif %}
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Advanced IDS. All rights reserved.</p>
+      <p>Powered by Machine Learning & Real-Time Detection</p>
+    </footer>
+
+    <script>
+      // Load statistics
+      async function loadStats() {
+        try {
+          const response = await fetch("/api/stats");
+          const data = await response.json();
+
+          document.getElementById("totalAlerts").textContent =
+            data.alerts.total_alerts;
+          document.getElementById("threatsBlocked").textContent =
+            data.alerts.by_severity.high || 0;
+        } catch (error) {
+          console.error("Error loading stats:", error);
+        }
+      }
+
+      // Upload functionality
+      const uploadArea = document.getElementById("uploadArea");
+      const fileInput = document.getElementById("fileInput");
+      const previewContainer = document.getElementById("previewContainer");
+      const previewImage = document.getElementById("previewImage");
+      const analyzeBtn = document.getElementById("analyzeBtn");
+      const spinner = document.getElementById("spinner");
+      const analysisResult = document.getElementById("analysisResult");
+      const resultBadge = document.getElementById("resultBadge");
+      const resultTitle = document.getElementById("resultTitle");
+      const resultDescription = document.getElementById("resultDescription");
+
+      let currentFile = null;
+
+      // Click to upload
+      uploadArea.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      // Drag and drop
+      uploadArea.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadArea.classList.add("dragover");
+      });
+
+      uploadArea.addEventListener("dragleave", () => {
+        uploadArea.classList.remove("dragover");
+      });
+
+      uploadArea.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove("dragover");
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      });
+
+      // File input change
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      // Handle file
+      function handleFile(file) {
+        currentFile = file;
+
+        // Show preview for images
+        if (file.type.startsWith("image/")) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewImage.src = "";
+          previewContainer.style.display = "block";
+          previewContainer.innerHTML = `
+                    <p>File: ${file.name}</p>
+                    <p>Size: ${(file.size / 1024).toFixed(2)} KB</p>
+                    <button class="btn-primary" id="analyzeBtn">Analyze File</button>
+                `;
+        }
+
+        analysisResult.style.display = "none";
+      }
+
+      // Analyze button
+      document.addEventListener("click", async (e) => {
+        if (e.target.id === "analyzeBtn") {
+          await analyzeFile();
+        }
+      });
+
+      // Analyze file
+      async function analyzeFile() {
+        if (!currentFile) return;
+
+        spinner.style.display = "block";
+        analysisResult.style.display = "none";
+
+        const formData = new FormData();
+        formData.append("file", currentFile);
+
+        try {
+          const response = await fetch("/api/upload-analyze", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+
+          spinner.style.display = "none";
+          analysisResult.style.display = "block";
+
+          if (result.is_suspicious) {
+            resultBadge.className = "result-badge threat";
+            resultBadge.textContent = `⚠️ Threat Detected - ${result.severity.toUpperCase()}`;
+            resultTitle.textContent = "Suspicious Content Found";
+            resultDescription.innerHTML = `
+                        <strong>Confidence:</strong> ${(
+                          result.confidence * 100
+                        ).toFixed(0)}%<br>
+                        <strong>Detection Method:</strong> ${
+                          result.detection_method
+                        }<br>
+                        <strong>Threats:</strong><br>
+                        ${result.reasons.map((r) => `• ${r}`).join("<br>")}
+                    `;
+          } else {
+            resultBadge.className = "result-badge safe";
+            resultBadge.textContent = "✓ No Threats Detected";
+            resultTitle.textContent = "File is Clean";
+            resultDescription.textContent =
+              "No suspicious content or patterns were found in this file.";
+          }
+        } catch (error) {
+          spinner.style.display = "none";
+          analysisResult.style.display = "block";
+          resultBadge.className = "result-badge threat";
+          resultBadge.textContent = "Error";
+          resultTitle.textContent = "Analysis Failed";
+          resultDescription.textContent =
+            "Could not analyze file. Please try again.";
+        }
+      }
+
+      // Load stats on page load
+      loadStats();
+
+      // Refresh stats every 30 seconds
+      setInterval(loadStats, 30000);
+    </script>
+  </body>
+</html>

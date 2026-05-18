@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced IDS - Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .severity-high { color: #f44336; }
+        .severity-medium { color: #ff9800; }
+        .severity-low { color: #ffc107; }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-card h2 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .alerts-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 10px;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .alert-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .alert-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .alert-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .alert-severity {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .severity-high-bg { background: #f44336; }
+        .severity-medium-bg { background: #ff9800; }
+        .severity-low-bg { background: #ffc107; }
+        
+        .alert-details {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .alert-reasons {
+            margin-top: 10px;
+            padding-left: 20px;
+            font-size: 13px;
+        }
+        
+        .alert-reasons li {
+            margin: 5px 0;
+        }
+        
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .refresh-btn:hover {
+            background: #5568d3;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                <span class="status"></span>
+                Advanced IDS Dashboard
+            </h1>
+            <p style="color: #666; margin-top: 10px;">Real-time Intrusion Detection System</p>
+        </header>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Alerts</h3>
+                <div class="stat-value" id="totalAlerts">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>High Severity</h3>
+                <div class="stat-value severity-high" id="highAlerts">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Medium Severity</h3>
+                <div class="stat-value severity-medium" id="mediumAlerts">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Recent (Last Hour)</h3>
+                <div class="stat-value" id="recentAlerts">0</div>
+            </div>
+        </div>
+        
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h2>Alert Timeline (24 Hours)</h2>
+                <canvas id="timelineChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Detection Methods</h2>
+                <canvas id="methodsChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Top Offending IPs</h2>
+                <canvas id="ipsChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h2>Severity Distribution</h2>
+                <canvas id="severityChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="alerts-section">
+            <div class="alerts-header">
+                <h2>Recent Alerts</h2>
+                <div class="filters">
+                    <select id="severityFilter">
+                        <option value="">All Severities</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <button class="refresh-btn" onclick="loadData()">🔄 Refresh</button>
+                </div>
+            </div>
+            <div class="alert-list" id="alertList">
+                <div class="loading">Loading alerts...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let charts = {};
+        
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            setInterval(loadData, 30000); // Refresh every 30 seconds
+        });
+        
+        // Severity filter
+        document.getElementById('severityFilter').addEventListener('change', loadAlerts);
+        
+        async function loadData() {
+            try {
+                await Promise.all([
+                    loadStats(),
+                    loadTimeline(),
+                    loadDetectionMethods(),
+                    loadTopIPs(),
+                    loadAlerts()
+                ]);
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+        
+        async function loadStats() {
+            const response = await fetch('/api/stats');
+            const data = await response.json();
+            
+            document.getElementById('totalAlerts').textContent = data.alerts.total_alerts;
+            document.getElementById('highAlerts').textContent = data.alerts.by_severity.high || 0;
+            document.getElementById('mediumAlerts').textContent = data.alerts.by_severity.medium || 0;
+            document.getElementById('recentAlerts').textContent = data.alerts.recent_count;
+            
+            // Update severity chart
+            updateSeverityChart(data.alerts.by_severity);
+        }
+        
+        async function loadTimeline() {
+            const response = await fetch('/api/timeline?hours=24');
+            const data = await response.json();
+            
+            const labels = data.timeline.map(t => t.hour.split(' ')[1]);
+            const highData = data.timeline.map(t => t.high);
+            const mediumData = data.timeline.map(t => t.medium);
+            const lowData = data.timeline.map(t => t.low);
+            
+            if (charts.timeline) {
+                charts.timeline.destroy();
+            }
+            
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            charts.timeline = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'High',
+                            data: highData,
+                            borderColor: '#f44336',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Medium',
+                            data: mediumData,
+                            borderColor: '#ff9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Low',
+                            data: lowData,
+                            borderColor: '#ffc107',
+                            backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadDetectionMethods() {
+            const response = await fetch('/api/detection-methods');
+            const data = await response.json();
+            
+            if (charts.methods) {
+                charts.methods.destroy();
+            }
+            
+            const ctx = document.getElementById('methodsChart').getContext('2d');
+            charts.methods = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Rule-based', 'ML-based', 'Hybrid'],
+                    datasets: [{
+                        data: [
+                            data.detection_methods.rule,
+                            data.detection_methods.ml,
+                            data.detection_methods.hybrid
+                        ],
+                        backgroundColor: ['#2196F3', '#4CAF50', '#9C27B0']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadTopIPs() {
+            const response = await fetch('/api/top-ips?limit=5');
+            const data = await response.json();
+            
+            if (charts.ips) {
+                charts.ips.destroy();
+            }
+            
+            const ctx = document.getElementById('ipsChart').getContext('2d');
+            charts.ips = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.top_ips.map(ip => ip.ip),
+                    datasets: [{
+                        label: 'Alerts',
+                        data: data.top_ips.map(ip => ip.count),
+                        backgroundColor: '#f44336'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateSeverityChart(severityData) {
+            if (charts.severity) {
+                charts.severity.destroy();
+            }
+            
+            const ctx = document.getElementById('severityChart').getContext('2d');
+            charts.severity = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['High', 'Medium', 'Low'],
+                    datasets: [{
+                        data: [
+                            severityData.high || 0,
+                            severityData.medium || 0,
+                            severityData.low || 0
+                        ],
+                        backgroundColor: ['#f44336', '#ff9800', '#ffc107']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function loadAlerts() {
+            const severity = document.getElementById('severityFilter').value;
+            const url = `/api/alerts?limit=50${severity ? '&severity=' + severity : ''}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            const alertList = document.getElementById('alertList');
+            
+            if (data.alerts.length === 0) {
+                alertList.innerHTML = '<div class="loading">No alerts found</div>';
+                return;
+            }
+            
+            alertList.innerHTML = data.alerts.map(alert => `
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <span class="alert-severity severity-${alert.severity}-bg">${alert.severity.toUpperCase()}</span>
+                        <span style="font-size: 12px; color: #999;">${new Date(alert.timestamp).toLocaleString()}</span>
+                    </div>
+                    <div class="alert-details">
+                        <strong>IP:</strong> ${alert.ip} | 
+                        <strong>Path:</strong> ${alert.path} | 
+                        <strong>Method:</strong> ${alert.method}
+                    </div>
+                    <div class="alert-details">
+                        <strong>Detection:</strong> ${alert.detection_method} (${(alert.confidence * 100).toFixed(1)}% confidence)
+                    </div>
+                    ${alert.reasons.length > 0 ? `
+                        <ul class="alert-reasons">
+                            ${alert.reasons.map(reason => `<li>• ${reason}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
